@@ -28,7 +28,8 @@ class DishDetail extends Component {
   renderComments(comments) {
     if (comments != null && !!comments.length) { 
       const feedback = comments.map(comment => {
-        const date = (new Date(comment.date)).toLocaleString()
+        const date = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'})
+                                     .format(new Date(Date.parse(comment.date)))
 
         return (
           <ol className="list-unstyled" key={comment.id}>
@@ -51,7 +52,9 @@ class DishDetail extends Component {
 
   render() {
     return (
-      this.renderDish(this.props.selectedDish)
+      <div className="container">
+        {this.renderDish(this.props.dish)}
+      </div>
     )
   }
 }
