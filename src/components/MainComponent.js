@@ -12,6 +12,8 @@ class Main extends Component {
       dishes: DISHES,
       selectedDishID: null
     };
+
+    console.log("Main## component contructor invoked.");
   }
 
   onDishSelect(dishId) {
