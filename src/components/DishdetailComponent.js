@@ -2,18 +2,7 @@ import React, { Component } from 'react';
 import { Card, CardImg, CardText, CardBody, CardTitle } from 'reactstrap';
 
 class DishDetail extends Component {
-
-  componentDidMount() {
-    console.log("Dishdetail Component componentDidMount invoked.");
-  }
-
-  componentDidUpdate() {
-    console.log("Dishdetail Component componentDidUpdate invoked.");
-  }
-
   renderDish(dish) {
-    console.log("Dishdetail Component render invoked.");
-
     if (dish != null) {
       return (
         <div className="row">
