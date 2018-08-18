@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Breadcrumb, BreadcrumbItem,
          Button, Form, FormGroup, Label, Input, Col,
          FormFeedback } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 class Contact extends Component {
   constructor(props) {
@@ -82,6 +83,12 @@ class Contact extends Component {
 
     return (
       <div className="container">
+        <div className="row">
+          <Breadcrumb>
+            <BreadcrumbItem><Link to="/home">Home</Link></BreadcrumbItem>
+            <BreadcrumbItem active>Contact us</BreadcrumbItem>
+          </Breadcrumb>
+        </div>
         <div className="row row-content">
           <div className="col-12">
             <h3>Location Information</h3>
