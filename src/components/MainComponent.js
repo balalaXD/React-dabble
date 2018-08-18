@@ -4,6 +4,7 @@ import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Home from './HomeComponent';
 import Contact from './ContactComponent';
+import DishDetail from './DishdetailComponent';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { DISHES } from '../shared/dishes';
 import { COMMENTS } from '../shared/comments';
@@ -36,12 +37,21 @@ class Main extends Component {
       )
     }
 
+    const DishWithId = ({match}) => {
+      console.log(match)
+      return(
+        <DishDetail dish={this.state.dishes.find((dish) => dish.id === +match.params.dishId)}
+          comments={this.state.comments.filter((comment) => comment.dishId === +match.params.dishId)} />
+      );
+    };
+
     return (
       <div>
         <Header />
           <Switch>
             <Route path='/home' component={HomePage} />
             <Route exact path='/menu' component={() => <Menu dishes={this.state.dishes} />} />
+            <Route exact path='/menu/:dishId' component={DishWithId} />} />
             <Route exact path='/contactus' component={Contact} />
             <Redirect to="/home" />
           </Switch>
