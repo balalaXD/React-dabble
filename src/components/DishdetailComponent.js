@@ -6,8 +6,29 @@ import {
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Control, LocalForm, Errors } from 'react-redux-form';
+import { Loading } from './LoadingComponent';
 
-function RenderDish({dish}) {
+function RenderDish({dish, isLoading, errMess}) {
+  if (isLoading) {
+    return(
+      <div className="container">
+        <div className="row">
+          <Loading />
+        </div>
+      </div>
+    );
+  }
+
+  if (errMess) {
+    return(
+      <div className="container">
+        <div className="row">
+          <h4>{errMess}</h4>
+        </div>
+      </div>
+    );
+  }
+
   if (dish != null) {
     return (
       <Card>
@@ -77,12 +98,10 @@ class CommentForm extends Component {
     const { dish, addComment } = this.props;
     const { author, rating, comment } = values;
     addComment(dish.id, rating, author, comment)
-    console.log(dish.id, rating, author, comment)
     // event.preventDefault();
   }
 
   render() {
-    console.log(this.props)
     const required = (val) => val && val.length;
     const maxLength = (len) => (val) => !(val) || (val.length <= len);
     const minLength = (len) => (val) => val && (val.length >= len);
@@ -163,16 +182,19 @@ const DishDetail = (props) => {
       <div className="row">
         <Breadcrumb>
           <BreadcrumbItem><Link to="/menu">Menu</Link></BreadcrumbItem>
-          <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
+          <BreadcrumbItem active>{props.dish ? props.dish.name : ''}</BreadcrumbItem>
         </Breadcrumb>
         <div className="col-12">
-          <h3>{props.dish.name}</h3>
+          <h3>{props.dish ? props.dish.name : ''}</h3>
           <hr />
         </div>
       </div>
       <div className="row">
         <div className="col-12 col-md-5 m-1">
-          <RenderDish dish={props.dish} />
+          <RenderDish
+            dish={props.dish}
+            isLoading={props.isLoading}
+            errMess={props.errMess} />
         </div>
         <div className="col-12 col-md-5 m-1">
           <RenderComments comments={props.comments}
