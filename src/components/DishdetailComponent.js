@@ -25,7 +25,7 @@ function RenderDish({dish}) {
   }
 }
 
-function RenderComments({comments}) {
+function RenderComments({comments, addComment, dish}) {
   if (comments != null && !!comments.length) {
     const feedback = comments.map(comment => {
       const date = new Intl
@@ -46,7 +46,9 @@ function RenderComments({comments}) {
       <React.Fragment>
         <h4>Comments</h4>
           {feedback}
-        <CommentForm />
+        <CommentForm
+          addComment={addComment}
+          dish={dish} />
       </React.Fragment>
     )
   } else {
@@ -72,12 +74,15 @@ class CommentForm extends Component {
   }
 
   handleSubmit(values) {
-    console.log('Current State is: ' + JSON.stringify(values));
-    alert('Current State is: ' + JSON.stringify(values));
+    const { dish, addComment } = this.props;
+    const { author, rating, comment } = values;
+    addComment(dish.id, rating, author, comment)
+    console.log(dish.id, rating, author, comment)
     // event.preventDefault();
   }
 
   render() {
+    console.log(this.props)
     const required = (val) => val && val.length;
     const maxLength = (len) => (val) => !(val) || (val.length <= len);
     const minLength = (len) => (val) => val && (val.length >= len);
@@ -93,7 +98,7 @@ class CommentForm extends Component {
                 <Label htmlFor="rating" xs={12}>Rating</Label>
                 <Col>
                   <Control.select model=".rating" id="rating" name="rating"
-                    className="form-control">
+                    className="form-control" defaultValue={5}>
                     <option>5</option>
                     <option>4</option>
                     <option>3</option>
@@ -104,17 +109,17 @@ class CommentForm extends Component {
               </Row>
 
               <Row className="form-group">
-                <Label htmlFor="name" xs={12}>Your Name</Label>
+                <Label htmlFor="author" xs={12}>Your Name</Label>
                 <Col>
-                  <Control.text model=".name" id="name" name="name"
+                  <Control.text model=".author" id="author" name="author"
                     placeholder="Your Name"
                     className="form-control"
                     validators={{
                       required, minLength: minLength(3), maxLength: maxLength(15)
-                    }}/>
+                    }} />
                   <Errors
                     className="text-danger"
-                    model=".name"
+                    model=".author"
                     show="touched"
                     messages={{
                         required: 'Required',
@@ -170,7 +175,9 @@ const DishDetail = (props) => {
           <RenderDish dish={props.dish} />
         </div>
         <div className="col-12 col-md-5 m-1">
-          <RenderComments comments={props.comments} />
+          <RenderComments comments={props.comments}
+            addComment={props.addComment}
+            dish={props.dish} />
         </div>
       </div>
     </div>
