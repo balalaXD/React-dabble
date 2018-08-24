@@ -3,6 +3,7 @@ import Menu from './MenuComponent'; // If you write `import { Menu } from PATH;'
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Home from './HomeComponent';
+import About from './AboutComponent';
 import Contact from './ContactComponent';
 import DishDetail from './DishdetailComponent';
 import { Switch, Route, Redirect } from 'react-router-dom';
@@ -31,14 +32,14 @@ class Main extends Component {
   render() {
     const HomePage = () => {
       return (
-        <Home dish={this.state.dishes.find((dish) => dish.featured)}
-              promotion={this.state.promotions.find((promo) => promo.featured)}
-              leader={this.state.leaders.find((leader) => leader.featured)}/>
+        <Home
+          dish={this.state.dishes.find((dish) => dish.featured)}
+          promotion={this.state.promotions.find((promo) => promo.featured)}
+          leader={this.state.leaders.find((leader) => leader.featured)}/>
       )
     }
 
     const DishWithId = ({match}) => {
-      console.log(match)
       return(
         <DishDetail dish={this.state.dishes.find((dish) => dish.id === +match.params.dishId)}
           comments={this.state.comments.filter((comment) => comment.dishId === +match.params.dishId)} />
@@ -50,6 +51,7 @@ class Main extends Component {
         <Header />
           <Switch>
             <Route path='/home' component={HomePage} />
+            <Route exact path='/aboutus' component={() => <About leaders={this.state.leaders} />} />
             <Route exact path='/menu' component={() => <Menu dishes={this.state.dishes} />} />
             <Route exact path='/menu/:dishId' component={DishWithId} />} />
             <Route exact path='/contactus' component={Contact} />
