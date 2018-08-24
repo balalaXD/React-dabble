@@ -9,7 +9,7 @@ import DishDetail from './DishdetailComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actions } from 'react-redux-form';
-import { addComment, fetchDishes } from '../redux/ActionsCreator';
+import { addComment, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionsCreator';
 
 const mapStateToProps = state => {
   return {
@@ -26,7 +26,9 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(action)
   },
   fetchDishes: () => { dispatch(fetchDishes()) },
-  resetFeedbackForm: () => { dispatch(actions.reset('feedback'))}
+  resetFeedbackForm: () => { dispatch(actions.reset('feedback')) },
+  fetchComments: () => dispatch(fetchComments()),
+  fetchPromos: () => dispatch(fetchPromos())
 })
 
 class Main extends Component {
@@ -36,6 +38,8 @@ class Main extends Component {
 
   componentDidMount() {
     this.props.fetchDishes();
+    this.props.fetchComments();
+    this.props.fetchPromos();
   }
 
   render() {
@@ -49,10 +53,12 @@ class Main extends Component {
       return (
         <Home
           dish={dishes.dishes.find((dish) => dish.featured)}
-          isLoading={dishes.isLoading}
-          errMess={dishes.errMess}
-          promotion={promotions.find((promo) => promo.featured)}
-          leader={leaders.find((leader) => leader.featured)}/>
+          dishLoading={dishes.isLoading}
+          dishErrMess={dishes.errMess}
+          promotion={promotions.promotions.find((promo) => promo.featured)}
+          promoLoading={promotions.isLoading}
+          promoErrMess={promotions.errMess}
+          leader={leaders.find((leader) => leader.featured)} />
       )
     }
 
@@ -60,9 +66,11 @@ class Main extends Component {
       return(
         <DishDetail
           dish={dishes.dishes.find((dish) => dish.id === +match.params.dishId)}
-          isLoading={dishes.isLoading}
-          errMess={dishes.errMess}
-          comments={comments.filter((comment) => comment.dishId === +match.params.dishId)}
+          dishLoading={dishes.isLoading}
+          dishErrMess={dishes.errMess}
+          comments={comments.comments.filter((comment) => comment.dishId === +match.params.dishId)}
+          commentsLoading={comments.isLoading}
+          commentsErrMess={comments.errMess}
           addComment={addComment} />
       );
     };

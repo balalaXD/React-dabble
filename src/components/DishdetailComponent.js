@@ -7,6 +7,7 @@ import {
 import { Link } from 'react-router-dom';
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Loading } from './LoadingComponent';
+import { baseUrl } from '../shared/baseUrl';
 
 function RenderDish({dish, isLoading, errMess}) {
   if (isLoading) {
@@ -32,7 +33,7 @@ function RenderDish({dish, isLoading, errMess}) {
   if (dish != null) {
     return (
       <Card>
-        <CardImg top src={dish.image} alt={dish.name} />
+        <CardImg top src={baseUrl + dish.image} alt={dish.name} />
         <CardBody>
           <CardTitle>{dish.name}</CardTitle>
           <CardText>{dish.description}</CardText>
@@ -46,7 +47,27 @@ function RenderDish({dish, isLoading, errMess}) {
   }
 }
 
-function RenderComments({comments, addComment, dish}) {
+function RenderComments({comments, addComment, dish, isLoading, errMess}) {
+  if (isLoading) {
+    return(
+      <div className="container">
+        <div className="row">
+          <Loading />
+        </div>
+      </div>
+    );
+  }
+
+  if (errMess) {
+    return(
+      <div className="container">
+        <div className="row">
+          <h4>{errMess}</h4>
+        </div>
+      </div>
+    );
+  }
+  
   if (comments != null && !!comments.length) {
     const feedback = comments.map(comment => {
       const date = new Intl
@@ -108,7 +129,9 @@ class CommentForm extends Component {
 
     return (
       <React.Fragment>
-        <Button onClick={this.toggleModal} color="primary">Submit Comment</Button>
+        <Button onClick={this.toggleModal} color="primary">
+          <span className="fa fa-pencil"> Submit Comment</span>
+        </Button>
         <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
           <ModalHeader toggle={this.toggleModal}>Login</ModalHeader>
           <ModalBody>
@@ -193,13 +216,15 @@ const DishDetail = (props) => {
         <div className="col-12 col-md-5 m-1">
           <RenderDish
             dish={props.dish}
-            isLoading={props.isLoading}
-            errMess={props.errMess} />
+            isLoading={props.dishLoading}
+            errMess={props.dishErrMess} />
         </div>
         <div className="col-12 col-md-5 m-1">
           <RenderComments comments={props.comments}
             addComment={props.addComment}
-            dish={props.dish} />
+            dish={props.dish}
+            isLoading={props.commentsLoading}
+            errMess={props.commentsErrMess} />
         </div>
       </div>
     </div>
