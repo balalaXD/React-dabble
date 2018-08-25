@@ -1,7 +1,7 @@
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { Fade, Stagger, Random } from 'react-animation-components';
+import { Fade, Stagger } from 'react-animation-components';
 import Loading from './LoadingComponent';
 
 function RenderLeader({leader}) {
