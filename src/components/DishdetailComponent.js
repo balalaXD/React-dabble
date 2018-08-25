@@ -47,7 +47,8 @@ function RenderDish({dish, isLoading, errMess}) {
   }
 }
 
-function RenderComments({comments, addComment, dish, isLoading, errMess}) {
+function RenderComments({comments, postComment, dish, isLoading, errMess})
+{
   if (isLoading) {
     return(
       <div className="container">
@@ -89,7 +90,7 @@ function RenderComments({comments, addComment, dish, isLoading, errMess}) {
         <h4>Comments</h4>
           {feedback}
         <CommentForm
-          addComment={addComment}
+          postComment={postComment}
           dish={dish} />
       </React.Fragment>
     )
@@ -116,9 +117,9 @@ class CommentForm extends Component {
   }
 
   handleSubmit(values) {
-    const { dish, addComment } = this.props;
+    const { dish, postComment } = this.props;
     const { author, rating, comment } = values;
-    addComment(dish.id, rating, author, comment)
+    postComment(dish.id, rating, author, comment)
     // event.preventDefault();
   }
 
@@ -221,7 +222,7 @@ const DishDetail = (props) => {
         </div>
         <div className="col-12 col-md-5 m-1">
           <RenderComments comments={props.comments}
-            addComment={props.addComment}
+            postComment={props.postComment}
             dish={props.dish}
             isLoading={props.commentsLoading}
             errMess={props.commentsErrMess} />
