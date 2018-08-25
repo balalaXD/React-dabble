@@ -11,14 +11,31 @@ export const addComment = (dishId, rating, author, comment) => ({
   }
 });
 
+const resolve = response => {
+  if (response.ok) {
+    return response;
+  } else { // Like 404 Not Found
+    var error = new Error('Error ' + response.status + ': ' + response.statusText)
+    error.response = response;
+    throw error
+  }
+}
+
+const reject = error => { // Like when you server shut down
+  var errmess = new Error(error.message)
+  throw errmess
+}
+
 
 export const fetchDishes = () => {
   return (dispatch) => {
     dispatch(dishesLoading())
-    
+
     return fetch(baseUrl + 'dishes')
+    .then(resolve, reject)
     .then(response => response.json())
-    .then(dishes => dispatch(addDishes(dishes)));
+    .then(dishes => dispatch(addDishes(dishes)))
+    .catch(error => dispatch(dishesFailed(error.message)))
   }
 }
 
@@ -41,8 +58,10 @@ export const fetchComments = () => (dispatch) => {
   dispatch(commentsLoading())
 
   return fetch(baseUrl + 'comments')
+  .then(resolve, reject)
   .then(response => response.json())
-  .then(comments => dispatch(addComments(comments)));
+  .then(comments => dispatch(addComments(comments)))
+  .catch(error => dispatch(commentsFailed(error.message)))
 };
 
 export const commentsLoading = () => ({
@@ -64,8 +83,10 @@ export const fetchPromos = () => (dispatch) => {
   dispatch(promosLoading());
 
   return fetch(baseUrl + 'promotions')
+  .then(resolve, reject)
   .then(response => response.json())
-  .then(promos => dispatch(addPromos(promos)));
+  .then(promos => dispatch(addPromos(promos)))
+  .catch(error => dispatch(promosFailed(error.message)))
 }
 
 export const promosLoading = () => ({
