@@ -1,6 +1,8 @@
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { Fade, Stagger, Random } from 'react-animation-components';
+import Loading from './LoadingComponent';
 
 function RenderLeader({leader}) {
   return (
@@ -19,12 +21,40 @@ function RenderLeader({leader}) {
   );
 }
 
-function About(props) {
-  const leaders = props.leaders.map((leader) => {
+function RenderLeaders({leaders, isLoading, errMess}) {
+  if (isLoading) {
     return (
-      <RenderLeader leader={leader} key={leader.id}/>
+      <Loading />
     );
-  });
+  }
+
+  if (errMess) {
+    return (
+      <h4>{errMess}</h4>
+    )
+  }
+
+  if (leaders && !!leaders.length) {
+    return (
+      <Media list>
+        <Stagger in>
+          { 
+            leaders.map((leader) => {
+              return (
+                <Fade in key={leader.id}>
+                  <RenderLeader leader={leader} />
+                </Fade>
+              )
+            })
+          }
+        </Stagger>
+      </Media>
+    )
+  }
+}
+
+function About(props) {
+  const { leaders, isLoading, errMess } = props.leaders;
 
   return(
     <div className="container">
@@ -84,9 +114,10 @@ function About(props) {
         <h2>Corporate Leadership</h2>
       </div>
       <div className="col-12">
-        <Media list>
-          {leaders}
-        </Media>
+        <RenderLeaders 
+          leaders={leaders}
+          isLoading={isLoading}
+          errMess={errMess} /> 
       </div>
     </div>
   </div>
