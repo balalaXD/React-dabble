@@ -33,6 +33,23 @@ function RenderDish({dish, isLoading, errMess}) {
 
   if (dish != null) {
     return (
+      // FadeTransform cosists of `fade' & `transform'
+      // --------------------------------------------------
+      // | WARNING: when in={false}, the opacity is 0     |
+      // | so if you want to TEST, you better to change   |
+      // | `FadeTransform` to `Transform', otherwise you  |
+      // | can't see them.                                |
+      // --------------------------------------------------
+
+      // transform and fade has two state, in or exit
+
+      // when `in={true}` or single `in`
+      // it will restore the `exitTransform' effect,
+      // and apply `enterTransform' effect
+
+      // reversely, when in={false},
+      // it will restore the `enterTransofrm` effect,
+      // and apply `exitTransform` effect
       <FadeTransform in transformProps={{
         exitTransform: 'scale(0.5) translateY(-50%)'
       }}>
